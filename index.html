@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StadionKu - Sistem Informasi & Booking Stadion</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+        }
+        .weather-card {
+            background: linear-gradient(135deg, #67b26f, #4ca2cd);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+        }
+        .stadion-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .stadion-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .booking-form {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+        }
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #e0f2fe;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        .testimonial-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .carousel-container {
+            position: relative;
+        }
+        .carousel-slides {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        .carousel-slide {
+            min-width: 100%;
+            display: none;
+        }
+        .carousel-slide.active {
+            display: block;
+        }
+        .indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+        }
+        .indicator.active {
+            background: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header & Navigation -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold mr-2">SK</div>
+                <span class="text-xl font-bold text-blue-800">StadionKu</span>
+            </div>
+            
+            <nav class="hidden md:flex space-x-8">
+                <a href="#home" class="text-gray-700 hover:text-blue-600 font-medium">Beranda</a>
+                <a href="#about" class="text-gray-700 hover:text-blue-600 font-medium">Tentang</a>
+                <a href="#booking" class="text-gray-700 hover:text-blue-600 font-medium">Booking</a>
+                <a href="#facilities" class="text-gray-700 hover:text-blue-600 font-medium">Fasilitas</a>
+                <a href="#contact" class="text-gray-700 hover:text-blue-600 font-medium">Kontak</a>
+            </nav>
+            
+            <div class="flex items-center space-x-4">
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hidden md:block">Login</button>
+                <button class="md:hidden text-gray-700">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="py-12 bg-gradient-to-r from-blue-500 to-indigo-700 text-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4">Booking Lapangan Stadion H Abdul Malik dengan Mudah</h1>
+                    <p class="text-xl mb-6">Sistem booking online dengan informasi lengkap dan prediksi cuaca untuk pengalaman terbaik</p>
+                    <div class="flex space-x-4">
+                        <a href="#booking" class="btn-primary bg-white text-blue-600 hover:bg-gray-100">Booking Sekarang</a>
+                        <a href="#about" class="btn-primary bg-transparent border-2 border-white hover:bg-white hover:text-blue-600">Pelajari Lebih Lanjut</a>
+                    </div>
+                </div>
+                <div class="md:w-1/2">
+                    <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="Tampilan modern stadion dengan lapangan sepak bola dan tribun penonton" class="rounded-2xl shadow-2xl">
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- About & Partnership Section -->
+    <section id="about" class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-8">Tentang StadionKu</h2>
+            
+            <div class="mb-12">
+                <div class="mb-6 relative">
+                    <div class="carousel-container rounded-2xl shadow-lg overflow-hidden">
+                        <div class="carousel-slides">
+                            <div class="carousel-slide active">
+                                <img src="https://placeholder-image-service.onrender.com/image/600x400?prompt=Modern stadium aerial view&id=cc5b7234-c205-44b1-90a8-3f51301a1d74" alt="Pemandangan udara stadion modern dengan lapangan hijau dan tribun" class="w-full h-64 md:h-80 object-cover">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="https://placeholder-image-service.onrender.com/image/600x400?prompt=Stadium entrance with crowds&id=1a2b3c4d-5e6f-7g8h-9i0j-1k2l3m4n5o6p" alt="Pintu masuk stadion dengan kerumunan penonton" class="w-full h-64 md:h-80 object-cover">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="https://placeholder-image-service.onrender.com/image/600x400?prompt=Stadium interior seating area&id=2b3c4d5e-6f7g-8h9i-0j1k-2l3m4n5o6p7q" alt="Area tempat duduk interior stadion" class="w-full h-64 md:h-80 object-cover">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="https://placeholder-image-service.onrender.com/image/600x400?prompt=Stadium field during match&id=3c4d5e6f-7g8h-9i0j-1k2l-3m4n5o6p7q8r" alt="Lapangan stadion saat pertandingan" class="w-full h-64 md:h-80 object-cover">
+                            </div>
+                        </div>
+                        <button class="carousel-prev absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-75 hover:bg-opacity-100 rounded-full p-2 shadow-md">
+                            <i class="fas fa-chevron-left text-gray-800"></i>
+                        </button>
+                        <button class="carousel-next absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-75 hover:bg-opacity-100 rounded-full p-2 shadow-md">
+                            <i class="fas fa-chevron-right text-gray-800"></i>
+                        </button>
+                        <div class="carousel-indicators absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                            <span class="indicator active" data-slide="0"></span>
+                            <span class="indicator" data-slide="1"></span>
+                            <span class="indicator" data-slide="2"></span>
+                            <span class="indicator" data-slide="3"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <h3 class="text-2xl font-semibold mb-4">Stadion Terbaik dengan Fasilitas Lengkap</h3>
+                    <p class="text-gray-700 mb-4">StadionKu adalah fasilitas olahraga berstandar internasional yang dilengkapi dengan berbagai fasilitas pendukung untuk atlet dan penonton. Dengan kapasitas 30.000 penonton, stadion ini menjadi kebanggaan kota.</p>
+
+                </div>
+            </div>
+            
+            <!-- Hospital Partnership -->
+            <div class="bg-blue-50 rounded-2xl p-8 mt-8">
+                <h3 class="text-2xl font-semibold mb-6 text-center">Kerjasama dengan Rumah Sakit</h3>
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/3 mb-6 md:mb-0 flex justify-center">
+                        <img src="https://placeholder-image-service.onrender.com/image/300x200?prompt=Modern hospital building with ambulance&id=d27f6ac0-62d8-438e-b274-ab6673e8b0d9" alt="Gedung rumah sakit modern dengan ambulans" class="rounded-xl">
+                    </div>
+                    <div class="md:w-2/3 md:pl-8">
+                        <p class="text-gray-700 mb-4">Kami bekerjasama dengan Rumah Sakit Umum Daerah dan beberapa rumah sakit swasta terkemuka untuk menyediakan layanan medis selama event berlangsung. Tim medis stand-by siap memberikan pertolongan pertama jika diperlukan.</p>
+                        <div class="flex items-center">
+                            <div class="bg-blue-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-ambulance text-blue-600 text-xl"></i>
+                            </div>
+                            <p>Layanan ambulans 24 jam selama event berlangsung</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section id="booking" class="py-12 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-8">Booking Lapangan</h2>
+            
+            <!-- Booking Calendar -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                <h4 class="text-lg font-semibold mb-4">Jadwal Booking</h4>
+                <div class="calendar">
+                    <div class="calendar-header flex justify-between items-center mb-4">
+                        <button class="calendar-prev text-gray-600 hover:text-blue-600">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <h5 class="font-semibold">November 2023</h5>
+                        <button class="calendar-next text-gray-600 hover:text-blue-600">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="calendar-grid grid grid-cols-7 gap-1 text-center text-sm">
+                        <div class="font-semibold text-gray-500">Min</div>
+                        <div class="font-semibold text-gray-500">Sen</div>
+                        <div class="font-semibold text-gray-500">Sel</div>
+                        <div class="font-semibold text-gray-500">Rab</div>
+                        <div class="font-semibold text-gray-500">Kam</div>
+                        <div class="font-semibold text-gray-500">Jum</div>
+                        <div class="font-semibold text-gray-500">Sab</div>
+                        <div class="calendar-day p-2 rounded flex flex-col items-center">
+                            <span>1</span>
+                            <span class="text-xs">☀️ 28°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded flex flex-col items-center">
+                            <span>2</span>
+                            <span class="text-xs">🌤️ 30°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded flex flex-col items-center">
+                            <span>3</span>
+                            <span class="text-xs">☀️ 29°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded flex flex-col items-center">
+                            <span>4</span>
+                            <span class="text-xs">🌧️ 27°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded flex flex-col items-center">
+                            <span>5</span>
+                            <span class="text-xs">☀️ 31°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded bg-red-100 text-red-800 flex flex-col items-center">
+                            <span>6</span>
+                            <span class="text-xs">🌤️ 32°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded bg-red-100 text-red-800 flex flex-col items-center">
+                            <span>7</span>
+                            <span class="text-xs">☀️ 33°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded bg-red-100 text-red-800 flex flex-col items-center">
+                            <span>8</span>
+                            <span class="text-xs">🌧️ 28°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded flex flex-col items-center">
+                            <span>9</span>
+                            <span class="text-xs">☀️ 30°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded flex flex-col items-center">
+                            <span>10</span>
+                            <span class="text-xs">🌤️ 29°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded flex flex-col items-center">
+                            <span>11</span>
+                            <span class="text-xs">☀️ 31°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded flex flex-col items-center">
+                            <span>12</span>
+                            <span class="text-xs">🌧️ 26°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded bg-blue-100 text-blue-800 flex flex-col items-center">
+                            <span>13</span>
+                            <span class="text-xs">☀️ 32°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded bg-blue-100 text-blue-800 flex flex-col items-center">
+                            <span>14</span>
+                            <span class="text-xs">🌤️ 30°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded flex flex-col items-center">
+                            <span>15</span>
+                            <span class="text-xs">☀️ 33°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded flex flex-col items-center">
+                            <span>16</span>
+                            <span class="text-xs">🌧️ 27°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded flex flex-col items-center">
+                            <span>17</span>
+                            <span class="text-xs">☀️ 31°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded flex flex-col items-center">
+                            <span>18</span>
+                            <span class="text-xs">🌤️ 29°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded flex flex-col items-center">
+                            <span>19</span>
+                            <span class="text-xs">☀️ 32°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded bg-red-100 text-red-800 flex flex-col items-center">
+                            <span>20</span>
+                            <span class="text-xs">🌧️ 28°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded bg-red-100 text-red-800 flex flex-col items-center">
+                            <span>21</span>
+                            <span class="text-xs">☀️ 30°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded flex flex-col items-center">
+                            <span>22</span>
+                            <span class="text-xs">🌤️ 31°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded flex flex-col items-center">
+                            <span>23</span>
+                            <span class="text-xs">☀️ 33°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded flex flex-col items-center">
+                            <span>24</span>
+                            <span class="text-xs">🌧️ 27°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded flex flex-col items-center">
+                            <span>25</span>
+                            <span class="text-xs">☀️ 32°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded flex flex-col items-center">
+                            <span>26</span>
+                            <span class="text-xs">🌤️ 30°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded bg-blue-100 text-blue-800 flex flex-col items-center">
+                            <span>27</span>
+                            <span class="text-xs">☀️ 31°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded bg-blue-100 text-blue-800 flex flex-col items-center">
+                            <span>28</span>
+                            <span class="text-xs">🌧️ 29°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded flex flex-col items-center">
+                            <span>29</span>
+                            <span class="text-xs">☀️ 33°C</span>
+                        </div>
+                        <div class="calendar-day p-2 rounded flex flex-col items-center">
+                            <span>30</span>
+                            <span class="text-xs">🌤️ 28°C</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-xs text-gray-600">
+                        <div class="flex items-center mb-1">
+                            <div class="w-3 h-3 bg-red-100 rounded mr-2"></div>
+                            <span>Booked</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 bg-blue-100 rounded mr-2"></div>
+                            <span>Partially Booked</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Booking Form -->
+                <div class="lg:w-2/3 booking-form">
+                    <h3 class="text-xl font-semibold mb-6">Form Pemesanan</h3>
+                    <form class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-gray-700 mb-2">Nama Lengkap</label>
+                                <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-2">Email</label>
+                                <input type="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-gray-700 mb-2">Tanggal Booking</label>
+                                <input type="date" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-2">Jenis Kegiatan</label>
+                                <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                                    <option>Latihan Tim</option>
+                                    <option>Pertandingan</option>
+                                    <option>Event Korporat</option>
+                                    <option>Konser</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-700 mb-2">Durasi</label>
+                            <div class="flex space-x-4">
+                                <label class="flex items-center">
+                                    <input type="radio" name="duration" class="mr-2"> 2 Jam
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="duration" class="mr-2"> 4 Jam
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="duration" class="mr-2"> 6 Jam
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="duration" class="mr-2"> Full Day
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-700 mb-2">Keterangan Tambahan</label>
+                            <textarea rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-primary w-full">Lanjutkan ke Pembayaran</button>
+                    </form>
+                </div>
+
+                <!-- Booking Information -->
+                <div class="lg:w-1/3">
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h4 class="text-lg font-semibold mb-4">Informasi Booking</h4>
+
+                        <div class="mb-6">
+                            <h5 class="font-medium text-gray-700 mb-2">Tarif Sewa</h5>
+                            <ul class="space-y-2">
+                                <li class="flex justify-between">
+                                    <span>2 Jam</span>
+                                    <span class="font-semibold">Rp 500.000</span>
+                                </li>
+                                <li class="flex justify-between">
+                                    <span>4 Jam</span>
+                                    <span class="font-semibold">Rp 900.000</span>
+                                </li>
+                                <li class="flex justify-between">
+                                    <span>6 Jam</span>
+                                    <span class="font-semibold">Rp 1.300.000</span>
+                                </li>
+                                <li class="flex justify-between">
+                                    <span>Full Day</span>
+                                    <span class="font-semibold">Rp 2.000.000</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="mb-6">
+                            <h5 class="font-medium text-gray-700 mb-2">Metode Pembayaran</h5>
+                            <div class="grid grid-cols-3 gap-2">
+                                <div class="border rounded-lg p-2 text-center">
+                                    <i class="fas fa-credit-card text-blue-600 text-2xl mb-1"></i>
+                                    <p class="text-xs">Transfer Bank</p>
+                                </div>
+                                <div class="border rounded-lg p-2 text-center">
+                                    <i class="fab fa-gopuram text-green-600 text-2xl mb-1"></i>
+                                    <p class="text-xs">Gopay</p>
+                                </div>
+                                <div class="border rounded-lg p-2 text-center">
+                                    <i class="fas fa-mobile-alt text-purple-600 text-2xl mb-1"></i>
+                                    <p class="text-xs">OVO</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h5 class="font-medium text-gray-700 mb-2">Syarat & Ketentuan</h5>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• Pembayaran dilakukan maksimal 2x24 jam setelah booking</li>
+                                <li>• Pembatalan dikenakan biaya 25% dari total harga</li>
+                                <li>• Durasi lebih dari waktu yang dipesan dikenakan biaya tambahan</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Facilities Section -->
+    <section id="facilities" class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-8">Fasilitas Stadion</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <div class="stadion-card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <img src="https://placeholder-image-service.onrender.com/image/300x200?prompt=FIFA standard football field with professional lighting&id=1a2b3c4d-5e6f-7g8h-9i0j-1k2l3m4n5o6p" alt="Lapangan sepak bola berstandar FIFA dengan pencahayaan profesional" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Lapangan Berstandar FIFA</h3>
+                        <p class="text-gray-600">Lapangan dengan kualitas internasional dan pencahayaan profesional untuk pertandingan malam.</p>
+                    </div>
+                </div>
+
+                <div class="stadion-card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <img src="https://placeholder-image-service.onrender.com/image/300x200?prompt=Large parking area with cars&id=2b3c4d5e-6f7g-8h9i-0j1k-2l3m4n5o6p7q" alt="Tempat parkir luas dengan banyak kendaraan" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Tempat Parkir Luas</h3>
+                        <p class="text-gray-600">Parkir aman dan nyaman untuk semua kendaraan dengan kapasitas besar.</p>
+                    </div>
+                </div>
+
+                <div class="stadion-card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <img src="https://placeholder-image-service.onrender.com/image/300x200?prompt=Professional stadium lighting system at night&id=3c4d5e6f-7g8h-9i0j-1k2l-3m4n5o6p7q8r" alt="Sistem pencahayaan profesional pada malam hari" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Sistem Pencahayaan Profesional</h3>
+                        <p class="text-gray-600">Pencahayaan terbaik untuk pertandingan malam dan event khusus.</p>
+                    </div>
+                </div>
+
+                <div class="stadion-card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <img src="https://placeholder-image-service.onrender.com/image/300x200?prompt=Complete athlete facilities with lockers and showers&id=4d5e6f7g-8h9i-0j1k-2l3m-4n5o6p7q8r9s" alt="Fasilitas atlet lengkap dengan loker dan kamar mandi" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Fasilitas Atlet Lengkap</h3>
+                        <p class="text-gray-600">Ruang ganti, shower, dan fasilitas pendukung untuk kenyamanan atlet.</p>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Staff Section -->
+    <section class="py-12 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-8">Tim StadionKu</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="text-center bg-white rounded-xl p-6 shadow-md">
+                    <img src="https://placeholder-image-service.onrender.com/image/150x150?prompt=Professional male stadium manager&id=ed47f61c-9f82-4e53-8866-62fcf9ae0008" alt="Manajer stadion profesional dengan setelan formal" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                    <h3 class="text-xl font-semibold">Budi Santoso</h3>
+                    <p class="text-blue-600 mb-2">Manajer Stadion</p>
+                    <p class="text-gray-600 text-sm">Pengalaman 10 tahun mengelola fasilitas olahraga.</p>
+                </div>
+                
+                <div class="text-center bg-white rounded-xl p-6 shadow-md">
+                    <img src="https://placeholder-image-service.onrender.com/image/150x150?prompt=Female event coordinator with headset&id=28d71b34-b246-43e5-9c21-b7f8bf4b906c" alt="Koordinator event wanita profesional dengan headset" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                    <h3 class="text-xl font-semibold">Dewi Lestari</h3>
+                    <p class="text-blue-600 mb-2">Koordinator Event</p>
+                    <p class="text-gray-600 text-sm">Spesialis dalam mengorganisir event olahraga besar.</p>
+                </div>
+                
+                <div class="text-center bg-white rounded-xl p-6 shadow-md">
+                    <img src="https://placeholder-image-service.onrender.com/image/150x150?prompt=Stadium maintenance staff in uniform&id=0d40c2b9-f5a2-4ff1-846e-ba020d9f357a" alt="Staf pemeliharaan stadion dengan seragam kerja" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                    <h3 class="text-xl font-semibold">Joko Prasetyo</h3>
+                    <p class="text-blue-600 mb-2">Kepala Pemeliharaan</p>
+                    <p class="text-gray-600 text-sm">Memastikan fasilitas selalu dalam kondisi terbaik.</p>
+                </div>
+                
+                <div class="text-center bg-white rounded-xl p-6 shadow-md">
+                    <img src="https://placeholder-image-service.onrender.com/image/150x150?prompt=Customer service representative smiling&id=91e97c09-e4f1-4c7a-910f-7b83f5372abe" alt="Perwakilan layanan pelanggan yang sedang tersenyum" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                    <h3 class="text-xl font-semibold">Rina Wijaya</h3>
+                    <p class="text-blue-600 mb-2">Customer Service</p>
+                    <p class="text-gray-600 text-sm">Siap membantu kebutuhan booking dan informasi.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-8">Apa Kata Pelanggan</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="testimonial-card">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 flex">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4">"Proses booking sangat mudah dan cepat. Fasilitasnya lengkap dan lapangan sangat terawat dengan baik."</p>
+                    <div class="flex items-center">
+                        <img src="https://placeholder-image-service.onrender.com/image/50x50?prompt=Happy young man smiling&id=90c17daf-06d5-4058-8329-358692c8ff45" alt="Pria muda tersenyum dengan latar belakang netral" class="w-10 h-10 rounded-full mr-3">
+                        <div>
+                            <p class="font-semibold">Ahmad Rizky</p>
+                            <p class="text-sm text-gray-500">Kapten Tim Sepak Bola</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 flex">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4">"Event perusahaan kami sukses besar berkat lokasi yang strategis dan dukungan tim yang profesional."</p>
+                    <div class="flex items-center">
+                        <img src="https://placeholder-image-service.onrender.com/image/50x50?prompt=Professional businesswoman portrait&id=7ec84f3f-c80b-45b3-8dd3-a22a4a713953" alt="Wanita profesional dengan penampilan bisnis" class="w-10 h-10 rounded-full mr-3">
+                        <div>
+                            <p class="font-semibold">Sari Dewi</p>
+                            <p class="text-sm text-gray-500">Event Manager Perusahaan</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 flex">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4">"Fasilitas medis yang disediakan sangat memadai dan membuat kami merasa aman selama pertandingan."</p>
+                    <div class="flex items-center">
+                        <img src="https://placeholder-image-service.onrender.com/image/50x50?prompt=Athlete wearing sports uniform&id=12dbcfba-1b6d-4344-adcb-3afa1f87fcef" alt="Atlet dengan seragam olahraga dan senyum percaya diri" class="w-10 h-10 rounded-full mr-3">
+                        <div>
+                            <p class="font-semibold">Rudi Hermawan</p>
+                            <p class="text-sm text-gray-500">Atlet Nasional</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">StadionKu</h3>
+                    <p class="text-gray-400">Sistem informasi dan booking stadion terpercaya dengan fasilitas lengkap dan pelayanan terbaik.</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Tautan Cepat</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-400 hover:text-white">Beranda</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-white">Tentang Kami</a></li>
+                        <li><a href="#booking" class="text-gray-400 hover:text-white">Booking</a></li>
+                        <li><a href="#facilities" class="text-gray-400 hover:text-white">Fasilitas</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Kontak Kami</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <i class="fas fa-map-marker-alt mr-2 text-blue-400"></i>
+                            <span class="text-gray-400">Jl. Stadion No. 123, Jakarta</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone-alt mr-2 text-blue-400"></i>
+                            <span class="text-gray-400">(021) 1234-5678</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-2 text-blue-400"></i>
+                            <span class="text-gray-400">info@stadionku.com</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Ikuti Kami</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-youtube text-xl"></i></a>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h4 class="text-lg font-semibold mb-2">Download App</h4>
+                        <div class="flex space-x-2">
+                            <button class="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded-lg flex items-center">
+                                <i class="fab fa-google-play mr-2"></i>
+                                <div class="text-left">
+                                    <div class="text-xs">Get it on</div>
+                                    <div class="font-semibold">Google Play</div>
+                                </div>
+                            </button>
+                            <button class="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded-lg flex items-center">
+                                <i class="fab fa-apple mr-2"></i>
+                                <div class="text-left">
+                                    <div class="text-xs">Download on the</div>
+                                    <div class="font-semibold">App Store</div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 StadionKu. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Live Chat Button -->
+    <div class="fixed bottom-6 right-6">
+        <button class="bg-blue-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center">
+            <i class="fas fa-comments text-xl"></i>
+        </button>
+    </div>
+
+    <script>
+        // Simple JavaScript for interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+            
+            // Mobile menu toggle simulation
+            document.querySelector('.fa-bars').addEventListener('click', function() {
+                alert('Menu mobile akan ditampilkan di sini pada versi lengkap');
+            });
+            
+            // Weather data simulation
+            const updateWeather = function() {
+                const weatherElements = document.querySelectorAll('.weather-card');
+                const conditions = ['Cerah', 'Berawan', 'Hujan Ringan', 'Cerah Berawan'];
+                const icons = ['☀️', '🌤️', '🌧️', '⛅'];
+                
+                weatherElements.forEach((card, index) => {
+                    const temp = Math.floor(Math.random() * 5) + 25;
+                    const conditionIndex = Math.floor(Math.random() * conditions.length);
+                    
+                    card.querySelector('p.text-3xl').textContent = `${temp}°C`;
+                    card.querySelector('p.mt-2').textContent = conditions[conditionIndex];
+                    card.querySelector('.text-5xl').textContent = icons[conditionIndex];
+                });
+            };
+            
+            // Update weather every 30 seconds (simulation)
+            setInterval(updateWeather, 30000);
+
+            // Carousel functionality
+            let currentSlide = 0;
+            const slides = document.querySelectorAll('.carousel-slide');
+            const indicators = document.querySelectorAll('.indicator');
+            const prevBtn = document.querySelector('.carousel-prev');
+            const nextBtn = document.querySelector('.carousel-next');
+
+            function showSlide(index) {
+                slides.forEach(slide => slide.classList.remove('active'));
+                indicators.forEach(ind => ind.classList.remove('active'));
+                slides[index].classList.add('active');
+                indicators[index].classList.add('active');
+                currentSlide = index;
+            }
+
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % slides.length;
+                showSlide(currentSlide);
+            }
+
+            function prevSlide() {
+                currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+                showSlide(currentSlide);
+            }
+
+            if (nextBtn && prevBtn) {
+                nextBtn.addEventListener('click', nextSlide);
+                prevBtn.addEventListener('click', prevSlide);
+            }
+
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => showSlide(index));
+            });
+
+            // Auto slide every 5 seconds
+            setInterval(nextSlide, 5000);
+        });
+    </script>
+</body>
+</html>
